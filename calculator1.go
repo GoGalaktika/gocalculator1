@@ -9,28 +9,26 @@ import (
 	"strings"
 )
 
+var (
+	pattern            = `^(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)[\+\*\/\-](I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)$|^(([1-9]|10)[\+\*\/\-]([1-9]|10))$`
+	patternObj         = regexp.MustCompile(pattern)
+	reader             = bufio.NewReader(os.Stdin)
+	romanMap           = map[string]int{"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10}
+	input              string
+	op                 byte
+	convNum1, convNum2 int
+)
+
 func convertRomanToArab(romNum string) int {
-	var arabNum int
-	for i := 0; i < len(romNum); i++ {
-		for j := 0; j < len(romanMap); j++ {
-			if romNum[i] == romanMap[j] {
-				return
-			}
+	for key, value := range romanMap {
+		if romNum == key {
+			return value
 		}
 	}
+	return 0
 }
 
 func main() {
-
-	var (
-		pattern            = `^(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)[\+\*\/\-](I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)$|^(([1-9]|10)[\+\*\/\-]([1-9]|10))$`
-		patternObj         = regexp.MustCompile(pattern)
-		reader             = bufio.NewReader(os.Stdin)
-		romanMap           = map[string]int{"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10}
-		input              string
-		op                 byte
-		convNum1, convNum2 int
-	)
 
 	for {
 
@@ -59,10 +57,10 @@ func main() {
 		if !(regexp.MustCompile(`^\d+$`).MatchString(num1)) {
 			convNum1 = convertRomanToArab(num1)
 			convNum2 = convertRomanToArab(num2)
+		} else {
+			convNum1, _ = strconv.Atoi(input[0:opIndex])
+			convNum2, _ = strconv.Atoi(input[opIndex+1:])
 		}
-
-		convNum1, _ = strconv.Atoi(input[0:opIndex])
-		convNum2, _ = strconv.Atoi(input[opIndex+1:])
 
 		//DO THE CALCULATIONS
 		var result int
