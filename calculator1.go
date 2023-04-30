@@ -32,7 +32,7 @@ func main() {
 			fmt.Println("Exiting program...")
 			break
 		} else if !(patternObj.MatchString(input)) {
-			fmt.Println("Only +-*/ expressions of roman and arabic numbers from 1 to 10 are allowed")
+			fmt.Println("Only +-*/ expressions of roman-only or arabic-only numbers from 1 to 10 are allowed")
 			continue
 		}
 
