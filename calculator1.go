@@ -12,11 +12,9 @@ import (
 func main() {
 
 	var (
-		pattern    = `^([1-9]|10)[\+\*\/\-]([1-9]|10)$`
-		pattern2   = `^((\b(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)\b)[\+\*\/\-](\b(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)\b))$`
+		pattern    = `^(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)[\+\*\/\-](I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)$|^(([1-9]|10)[\+\*\/\-]([1-9]|10))$`
 		patternObj = regexp.MustCompile(pattern)
 		reader     = bufio.NewReader(os.Stdin)
-		//
 	)
 
 	for {
