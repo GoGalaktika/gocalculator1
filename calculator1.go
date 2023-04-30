@@ -15,11 +15,13 @@ func main() {
 		pattern    = `^(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)[\+\*\/\-](I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)$|^(([1-9]|10)[\+\*\/\-]([1-9]|10))$`
 		patternObj = regexp.MustCompile(pattern)
 		reader     = bufio.NewReader(os.Stdin)
+		//input
+		//num1,num2
 	)
 
 	for {
 
-		fmt.Println("Please enter a math expression or \"exit\" to quit (e.g. 5+4):")
+		fmt.Println("Please enter a math expression or \"exit\" to quit (e.g. 5+4 or IV*III):")
 
 		input, _ := reader.ReadString('\n')
 
@@ -30,7 +32,7 @@ func main() {
 			fmt.Println("Exiting program...")
 			break
 		} else if !(patternObj.MatchString(input)) {
-			fmt.Println("Only +-*/ expressions of numbers from 1 to 10 are allowed")
+			fmt.Println("Only +-*/ expressions of roman and arabic numbers from 1 to 10 are allowed")
 			continue
 		}
 
