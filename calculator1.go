@@ -17,6 +17,7 @@ var (
 	input              string
 	op                 byte
 	convNum1, convNum2 int
+	result             int
 )
 
 func convertRomanToArab(romNum string) int {
@@ -25,7 +26,7 @@ func convertRomanToArab(romNum string) int {
 			return value
 		}
 	}
-	return 0
+	return 666
 }
 
 func convertArabToRoman(arabNum int) string {
@@ -35,6 +36,22 @@ func convertArabToRoman(arabNum int) string {
 		}
 	}
 	return ""
+}
+
+func calculate(operator byte, numb1, numb2 int) int {
+	switch operator {
+	case '+':
+		return numb1 + numb2
+	case '-':
+		return numb1 - numb2
+	case '*':
+		return numb1 * numb2
+	case '/':
+		return numb1 / numb2
+	default:
+		fmt.Println("Invalid operator")
+		return 666
+	}
 }
 
 func main() {
@@ -66,28 +83,33 @@ func main() {
 		if !(regexp.MustCompile(`^\d+$`).MatchString(num1)) {
 			convNum1 = convertRomanToArab(num1)
 			convNum2 = convertRomanToArab(num2)
+			result = calculate(op, convNum1, convNum2)
+			fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, convertArabToRoman(result))
+
 		} else {
 			convNum1, _ = strconv.Atoi(input[0:opIndex])
 			convNum2, _ = strconv.Atoi(input[opIndex+1:])
+			result = calculate(op, convNum1, convNum2)
+			fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, result)
 		}
 
 		//DO THE CALCULATIONS
-		var result int
-		switch op {
-		case '+':
-			result = convNum1 + convNum2
-		case '-':
-			result = convNum1 - convNum2
-		case '*':
-			result = convNum1 * convNum2
-		case '/':
-			result = convNum1 / convNum2
-		default:
-			fmt.Println("Invalid operator")
-			continue
-		}
+		// var result int
+		// switch op {
+		// case '+':
+		// 	result = convNum1 + convNum2
+		// case '-':
+		// 	result = convNum1 - convNum2
+		// case '*':
+		// 	result = convNum1 * convNum2
+		// case '/':
+		// 	result = convNum1 / convNum2
+		// default:
+		// 	fmt.Println("Invalid operator")
+		// 	continue
+		// }
 
-		fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, result) //print first number, operator and second number
+		//fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, result) //print first number, operator and second number
 		//
 	}
 }
