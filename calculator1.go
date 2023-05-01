@@ -13,19 +13,28 @@ var (
 	pattern            = `^(I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)[\+\*\/\-](I|(II)|(III)|(IV)|V|(VI)|(VII)|(VIII)|(IX)|X)$|^(([1-9]|10)[\+\*\/\-]([1-9]|10))$`
 	patternObj         = regexp.MustCompile(pattern)
 	reader             = bufio.NewReader(os.Stdin)
-	romanMap           = map[string]int{"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10}
+	romanArabMap       = map[string]int{"I": 1, "II": 2, "III": 3, "IV": 4, "V": 5, "VI": 6, "VII": 7, "VIII": 8, "IX": 9, "X": 10}
 	input              string
 	op                 byte
 	convNum1, convNum2 int
 )
 
 func convertRomanToArab(romNum string) int {
-	for key, value := range romanMap {
+	for key, value := range romanArabMap {
 		if romNum == key {
 			return value
 		}
 	}
 	return 0
+}
+
+func convertArabToRoman(arabNum int) string {
+	for key, value := range romanArabMap {
+		if arabNum == value {
+			return key
+		}
+	}
+	return ""
 }
 
 func main() {
