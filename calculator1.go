@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"os"
 	"regexp"
@@ -20,13 +21,13 @@ var (
 	result             int
 )
 
-func convertRomanToArab(romNum string) int {
+func convertRomanToArab(romNum string) (int, error) {
 	for key, value := range romanArabMap {
 		if romNum == key {
-			return value
+			return value, nil
 		}
 	}
-	return 666
+	return 0, errors.New(`The number is outside of the allowed range`)
 }
 
 // func convertArabToRoman(arabNum int) string {
@@ -38,38 +39,37 @@ func convertRomanToArab(romNum string) int {
 // 	return ""
 // }
 
-func convertArabToRoman(arabNum int) string {
-	if arabNum < 1 || arabNum > 100 {
-		return ""
+func convertArabToRoman(arabNum int) (string, error) {
+	if arabNum < 1 {
+		return "", errors.New(`Error! There is no zero or negative numbers in Roman numeral system`)
 	}
 
 	romanNumerals := []string{"C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"}
 	arabicValues := []int{100, 90, 50, 40, 10, 9, 5, 4, 1}
 
-	var result string
+	var convResult string
 	for i := 0; i < len(arabicValues); i++ {
 		for arabNum >= arabicValues[i] {
 			arabNum -= arabicValues[i]
-			result += romanNumerals[i]
+			convResult += romanNumerals[i]
 		}
 	}
 
-	return result
+	return convResult, nil
 }
 
-func calculate(operator byte, numb1, numb2 int) int {
+func calculate(operator byte, numb1, numb2 int) (int, error) {
 	switch operator {
 	case '+':
-		return numb1 + numb2
+		return numb1 + numb2, nil
 	case '-':
-		return numb1 - numb2
+		return numb1 - numb2, nil
 	case '*':
-		return numb1 * numb2
+		return numb1 * numb2, nil
 	case '/':
-		return numb1 / numb2
+		return numb1 / numb2, nil
 	default:
-		fmt.Println("Invalid operator")
-		return 666
+		return 0, errors.New(`invalid operator`)
 	}
 }
 
@@ -80,6 +80,7 @@ func main() {
 		fmt.Println("Please enter a math expression or \"exit\" to quit (e.g. 5+4 or IV*III):")
 
 		input, _ = reader.ReadString('\n')
+		//input = "V*X"
 
 		input = strings.ReplaceAll(input, " ", "")
 		input = strings.TrimSpace(input)
@@ -100,35 +101,51 @@ func main() {
 		num2 := input[opIndex+1:]
 
 		if !(regexp.MustCompile(`^\d+$`).MatchString(num1)) {
-			convNum1 = convertRomanToArab(num1)
-			convNum2 = convertRomanToArab(num2)
-			result = calculate(op, convNum1, convNum2)
-			fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, convertArabToRoman(result))
+			convNum1, err1 := convertRomanToArab(num1)
+			convNum2, err2 := convertRomanToArab(num2)
+			if err1 != nil {
+				fmt.Println(err1.Error())
+				break
+			} else if err2 != nil {
+				fmt.Println(err2.Error())
+				break
+			} else {
+				result, calcErr := calculate(op, convNum1, convNum2)
 
+				if calcErr != nil {
+					fmt.Println(calcErr.Error())
+					break
+				} else {
+					convResult, err := convertArabToRoman(result)
+					if err != nil {
+						fmt.Printf("%s\n The expression: %v %c %v is invalid\n", err.Error(), num1, op, num2)
+						break
+					} else {
+						fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, convResult)
+					}
+				}
+
+			}
 		} else {
-			convNum1, _ = strconv.Atoi(input[0:opIndex])
-			convNum2, _ = strconv.Atoi(input[opIndex+1:])
-			result = calculate(op, convNum1, convNum2)
-			fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, result)
+			convNum1, err1 := strconv.Atoi(input[0:opIndex])
+			convNum2, err2 := strconv.Atoi(input[opIndex+1:])
+			if err1 != nil {
+				fmt.Println(err1.Error())
+				break
+			} else if err2 != nil {
+				fmt.Println(err2.Error())
+				break
+			} else {
+				result, calcErr := calculate(op, convNum1, convNum2)
+
+				if calcErr != nil {
+					fmt.Println(calcErr.Error())
+					break
+				} else {
+					fmt.Printf("%v %c %v = %v\n", num1, op, num2, result)
+				}
+			}
 		}
 
-		//DO THE CALCULATIONS
-		// var result int
-		// switch op {
-		// case '+':
-		// 	result = convNum1 + convNum2
-		// case '-':
-		// 	result = convNum1 - convNum2
-		// case '*':
-		// 	result = convNum1 * convNum2
-		// case '/':
-		// 	result = convNum1 / convNum2
-		// default:
-		// 	fmt.Println("Invalid operator")
-		// 	continue
-		// }
-
-		//fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, result) //print first number, operator and second number
-		//
 	}
 }
