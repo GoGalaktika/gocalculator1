@@ -27,7 +27,7 @@ func convertRomanToArab(romNum string) (int, error) {
 			return value, nil
 		}
 	}
-	return 0, errors.New(`The number is outside of the allowed range`)
+	return 0, errors.New(`the number is outside of the allowed range`)
 }
 
 // func convertArabToRoman(arabNum int) string {
@@ -41,7 +41,7 @@ func convertRomanToArab(romNum string) (int, error) {
 
 func convertArabToRoman(arabNum int) (string, error) {
 	if arabNum < 1 {
-		return "", errors.New(`Error! There is no zero or negative numbers in Roman numeral system`)
+		return "", errors.New(`error! There is no zero or negative numbers in Roman numeral system`)
 	}
 
 	romanNumerals := []string{"C", "XC", "L", "XL", "X", "IX", "V", "IV", "I"}
@@ -118,7 +118,7 @@ func main() {
 				} else {
 					convResult, err := convertArabToRoman(result)
 					if err != nil {
-						fmt.Printf("%s\n The expression: %v %c %v is invalid\n", err.Error(), num1, op, num2)
+						fmt.Printf("The expression: %v %c %v is invalid\n%s\n ", num1, op, num2, err.Error())
 						break
 					} else {
 						fmt.Printf("%v %T %c %v %T = %v\n", num1, num1, op, num2, num2, convResult)
